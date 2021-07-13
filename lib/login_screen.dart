@@ -1,31 +1,32 @@
+import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/material.dart';
-import 'package:password_manager/login.dart';
-
-const users = const {
-  'dribbble@gmail.com': '12345',
-  'hunter@gmail.com': 'hunter',
-};
+import 'package:flutter_login/flutter_login.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'constants.dart';
+import 'custom_route.dart';
+import 'dashboard_screen.dart';
+import 'users.dart';
 
 class LoginScreen extends StatelessWidget {
-  Duration get loginTime => Duration(milliseconds: 2250);
+  static const routeName = '/auth';
 
-  Future<String> _authUser(LoginData data) {
-    print('Name: ${data.name}, Password: ${data.password}');
+  Duration get loginTime => Duration(milliseconds: timeDilation.ceil() * 2250);
+
+  Future<String?> _loginUser(LoginData data) {
     return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(data.name)) {
+      if (!mockUsers.containsKey(data.name)) {
         return 'User not exists';
       }
-      if (users[data.name] != data.password) {
+      if (mockUsers[data.name] != data.password) {
         return 'Password does not match';
       }
       return null;
     });
   }
 
-  Future<String> _recoverPassword(String name) {
-    print('Name: $name');
+  Future<String?> _recoverPassword(String name) {
     return Future.delayed(loginTime).then((_) {
-      if (!users.containsKey(name)) {
+      if (!mockUsers.containsKey(name)) {
         return 'User not exists';
       }
       return null;
@@ -34,17 +35,49 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Login(
-      title: 'ECORP',
-      logo: 'assets/images/ecorp-lightblue.png',
-      onLogin: _authUser,
-      onSignup: _authUser,
+    return FlutterLogin(
+      title: Constants.appName,
+      logo: 'assets/images/ecorp.png',
+      logoTag: Constants.logoTag,
+      titleTag: Constants.titleTag,
+      userValidator: (value) {
+        if (!value!.contains('@')) {
+          return "Email must contain '@'";
+        }
+        return null;
+      },
+      passwordValidator: (value) {
+        if (value!.isEmpty) {
+          return 'Password is empty';
+        }
+        return null;
+      },
+      onLogin: (loginData) {
+        print('Login info');
+        print('Username: ${loginData.name}');
+        print('Password: ${loginData.password}');
+        return _loginUser(loginData);
+      },
+      onSignup: (loginData) {
+        print('Signup info');
+        print('Name: ${loginData.name}');
+        print('Password: ${loginData.password}');
+        return _loginUser(loginData);
+      },
       onSubmitAnimationCompleted: () {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
+        Navigator.of(context).pushReplacement(FadePageRoute(
           builder: (context) => DashboardScreen(),
         ));
       },
-      onRecoverPassword: _recoverPassword,
+      onRecoverPassword: (name) {
+        print('Recover password info');
+        print('Name: $name');
+        return _recoverPassword(name);
+        // Show new password dialog
+      },
+      hideForgotPasswordButton: true,
+      hideSignUpButton: true,
+      // showDebugButtons: true,
     );
   }
 }
