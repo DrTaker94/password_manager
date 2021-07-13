@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'dashboard_screen.dart';
-import 'login_screen.dart';
+import 'screens/dashboard_screen.dart';
+import 'screens/login_screen.dart';
 import 'routes/transition_route_observer.dart';
 import 'package:window_size/window_size.dart';
 import 'dart:io';
@@ -15,6 +15,7 @@ void main() {
   );
 
   WidgetsFlutterBinding.ensureInitialized();
+  // Windows screen size
   if (Platform.isWindows) {
     setWindowTitle("Password Manager");
     setWindowMinSize(const Size(1000, 800));

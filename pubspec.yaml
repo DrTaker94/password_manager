@@ -57,6 +57,7 @@ flutter:
     - assets/images/ecorp.png
     - assets/images/ecorp-lightblue.png
     - assets/images/ecorp-lightgreen.png
+    - assets/images/cerebra_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

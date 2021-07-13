@@ -3,10 +3,6 @@ import 'package:password_manager/model/password_info.dart';
 import 'package:password_manager/dummy_data/password_info_dump.dart';
 
 class NewRecord extends StatefulWidget {
-  // final Function addRec;
-  // int idCount = 11; // Keep track of ID for now
-  //
-  // NewRecord(this.addRec, this.idCount);
 
   @override
   _NewRecordState createState() => _NewRecordState();

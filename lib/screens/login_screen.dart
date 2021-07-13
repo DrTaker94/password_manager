@@ -2,10 +2,10 @@ import 'package:flutter/scheduler.dart' show timeDilation;
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'constants.dart';
-import 'routes/custom_route.dart';
+import '../constants.dart';
+import '../routes/custom_route.dart';
 import 'dashboard_screen.dart';
-import 'dummy_data/users.dart';
+import '../dummy_data/users.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = '/auth';
@@ -37,7 +37,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlutterLogin(
       title: Constants.appName,
-      logo: 'assets/images/ecorp.png',
+      logo: 'assets/images/cerebra_logo.png',
       logoTag: Constants.logoTag,
       titleTag: Constants.titleTag,
       userValidator: (value) {

@@ -7,11 +7,11 @@ import 'package:flutter_login/widgets.dart';
 import 'package:password_manager/new_record.dart';
 import 'package:password_manager/dummy_data/password_info_dump.dart';
 import 'package:password_manager/widgets/build_data_table.dart';
-import 'routes/transition_route_observer.dart';
-import 'widgets/fade_in.dart';
-import 'constants.dart';
-import 'widgets/animated_numeric_text.dart';
-import 'widgets/round_button.dart';
+import '../routes/transition_route_observer.dart';
+import '../widgets/fade_in.dart';
+import '../constants.dart';
+import '../widgets/animated_numeric_text.dart';
+import '../widgets/round_button.dart';
 import 'package:random_password_generator/random_password_generator.dart';
 import 'package:flutter/services.dart';
 
@@ -99,7 +99,7 @@ class _DashboardScreenState extends State<DashboardScreen>
             child: Hero(
               tag: Constants.logoTag,
               child: Image.asset(
-                'assets/images/ecorp.png',
+                'assets/images/cerebra_logo.png',
                 filterQuality: FilterQuality.high,
                 height: 30,
               ),
