@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
 import 'login_screen.dart';
-import 'transition_route_observer.dart';
+import 'routes/transition_route_observer.dart';
 import 'package:window_size/window_size.dart';
 import 'dart:io';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:password_manager/password_info_dump.dart';
+import 'package:password_manager/dummy_data/password_info_dump.dart';
 
 class BuildDataTable extends StatelessWidget {
   const BuildDataTable({Key? key}) : super(key: key);

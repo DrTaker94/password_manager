@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:password_manager/model/password_info.dart';
-import 'package:password_manager/password_info_dump.dart';
+import 'package:password_manager/dummy_data/password_info_dump.dart';
 
 class NewRecord extends StatefulWidget {
   // final Function addRec;

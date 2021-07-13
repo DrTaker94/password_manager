@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'constants.dart';
-import 'custom_route.dart';
+import 'routes/custom_route.dart';
 import 'dashboard_screen.dart';
-import 'users.dart';
+import 'dummy_data/users.dart';
 
 class LoginScreen extends StatelessWidget {
   static const routeName = '/auth';
