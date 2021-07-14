@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:password_manager/dummy_data/password_info_dump.dart';
+import 'package:password_manager/model/password_info.dart';
 
 class BuildDataTable extends StatelessWidget {
-  const BuildDataTable({Key? key}) : super(key: key);
+  final List<PasswordInfo> userRecords;
+
+  BuildDataTable(this.userRecords);
+
 
   @override
   Widget build(BuildContext context) {
     // final colNum = 5;
     // final rowHeight = (MediaQuery.of(context).size.height - 56) / colNum;
     // final colHeight = (MediaQuery.of(context).size.width);
+
+    print("Print BuildDataTable: ${(userRecords.map((e) => e.username)).toList()}");
 
     const headerFontSize = 22.0;
 
@@ -89,7 +95,8 @@ class BuildDataTable extends StatelessWidget {
               ),
             ),
           ],
-          rows: DUMMY_INFO
+          // rows: DUMMY_INFO
+            rows: userRecords
               .map((info) => DataRow(
             color: MaterialStateProperty.resolveWith<Color?>(
                     (Set<MaterialState> states) {
