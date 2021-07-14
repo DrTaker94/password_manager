@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_login/theme.dart';
 import 'package:flutter_login/widgets.dart';
+import 'package:password_manager/model/password_info.dart';
 import 'package:password_manager/new_record.dart';
-import 'package:password_manager/dummy_data/password_info_dump.dart';
 import 'package:password_manager/widgets/build_data_table.dart';
 import '../routes/transition_route_observer.dart';
 import '../widgets/fade_in.dart';
@@ -204,9 +203,9 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  Widget _buildDashboardGrid() {
-    return BuildDataTable();
-  }
+  // Widget _buildDashboardGrid() {
+  //   return BuildDataTable(_userRecords);
+  // }
 
   Widget _buildDebugButtons() {
     const textStyle = TextStyle(fontSize: 12, color: Colors.white);
@@ -229,30 +228,90 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
+  final List<PasswordInfo> _userRecords = [
+    PasswordInfo(
+      id: 1,
+      title: "Facebook",
+      username: "test@gmail.com",
+      password: r"Fb$12Esa",
+      url: "https://facebook.com",
+      notes: "Login to facebook",
+    ),
+    PasswordInfo(
+      id: 2,
+      title: "Gmail",
+      username: "test@gmail.com",
+      password: r"Gm$tYsw1",
+      url: "https://gmail.com",
+      notes: "Sign in to sub gmail account",
+    ),
+    PasswordInfo(
+      id: 3,
+      title: "GitHub",
+      username: "test@gmail.com",
+      password: r"vv%21SAQ^ld",
+      url: "https://github.com/login",
+      notes: "",
+    ),
+    PasswordInfo(
+      id: 4,
+      title: "GitLab",
+      username: "hsayfi@outlook.com",
+      password: r"TestMe",
+      url: "https://gitlab.com/users/sign_in",
+      notes: "Work git account",
+    ),
+  ];
+
+  void _addNewRecord(String recTitle, String recUsername, String recPassword,
+      String recUrl, String recNotes) {
+    // print("dummy info length: ${DUMMY_INFO.length}");
+
+    final newRec = PasswordInfo(
+      id: _userRecords.length + 1,
+      title: recTitle,
+      username: recUsername,
+      password: recPassword,
+      url: recUrl,
+      notes: recNotes,
+    );
+
+    print("Check newRec $newRec");
+
+    setState(() {
+      _userRecords.add(newRec);
+
+      print("Print _UserRecords: ${(_userRecords.map((e) => e.id)).toList()}");
+    });
+
+    print(
+      "title: $recTitle, username: $recUsername, password: $recPassword, url: $recUrl, notes: $recNotes",
+    );
+  }
+
+  // void _startAddNewRecord(BuildContext ctx) {
+  //   showModalBottomSheet(
+  //     context: ctx,
+  //     builder: (_) {
+  //       return GestureDetector(
+  //         onTap: () {},
+  //         child: NewRecord(),
+  //         behavior: HitTestBehavior.opaque,
+  //       );
+  //     },
+  //   );
+  // }
+  void _startAddNewRecord(BuildContext ctx) {
+    showModalBottomSheet(
+      context: ctx,
+      builder: (_) {
+        return NewRecord(_addNewRecord);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    // void _startAddNewRecord(BuildContext ctx) {
-    //   showModalBottomSheet(
-    //     context: ctx,
-    //     builder: (_) {
-    //       return GestureDetector(
-    //         onTap: () {},
-    //         child: NewRecord(),
-    //         behavior: HitTestBehavior.opaque,
-    //       );
-    //     },
-    //   );
-    // }
-    void _startAddNewRecord(BuildContext ctx) {
-      showModalBottomSheet(
-        context: ctx,
-        builder: (_) {
-          return NewRecord();
-        },
-      );
-    }
-
     final theme = Theme.of(context);
 
     return WillPopScope(
@@ -270,7 +329,7 @@ class _DashboardScreenState extends State<DashboardScreen>
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: _buildDashboardGrid(),
+                  child: BuildDataTable(_userRecords),
                 ),
                 SizedBox(
                   height: 50,
@@ -313,6 +372,8 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   Center(
                                     child: TextButton(
                                       onPressed: () {
+                                        print(
+                                            "Print _UserRecords: ${(_userRecords.map((e) => e.id)).toList()}");
                                         Clipboard.setData(
                                           ClipboardData(text: newPassword),
                                         );
@@ -358,7 +419,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                     ),
                   ],
                 ),
-              //
+                //
               ],
             ),
           ),
@@ -368,7 +429,5 @@ class _DashboardScreenState extends State<DashboardScreen>
   }
 
   @override
-  void reassemble() {
-
-  }
+  void reassemble() {}
 }
