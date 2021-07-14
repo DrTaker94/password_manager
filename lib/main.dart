@@ -15,9 +15,9 @@ void main() {
   );
 
   WidgetsFlutterBinding.ensureInitialized();
-  // Windows screen size
+  // Windows screen size and title
   if (Platform.isWindows) {
-    setWindowTitle("Password Manager");
+    setWindowTitle("PassLock");
     setWindowMinSize(const Size(1000, 800));
     setWindowMaxSize(const Size(1200, 900));
   }
