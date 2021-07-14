@@ -3,20 +3,22 @@ import 'package:password_manager/model/password_info.dart';
 import 'package:password_manager/dummy_data/password_info_dump.dart';
 
 class NewRecord extends StatefulWidget {
+  final Function addRec;
+
+  NewRecord(this.addRec);
 
   @override
   _NewRecordState createState() => _NewRecordState();
 }
 
 class _NewRecordState extends State<NewRecord> {
-  final _titleController = TextEditingController(text: "WebSite");
+  final _titleController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _urlController = TextEditingController();
   final _notesController = TextEditingController();
 
   void _submitData() {
-    // TODO:Add new record
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
       return;
     }
@@ -29,22 +31,30 @@ class _NewRecordState extends State<NewRecord> {
     if (enteredUsername.isEmpty || enteredPassword.isEmpty) {
       return;
     }
+    widget.addRec(
+      enteredTitle,
+      enteredUsername,
+      enteredPassword,
+      enteredUrl,
+      enteredNotes,
+    );
 
-    int lastId = DUMMY_INFO[DUMMY_INFO.length - 1].id;
-    print("Last ID: $lastId");
+    Navigator.of(context).pop();
 
-    setState(() {
-      DUMMY_INFO.add(PasswordInfo(
-          id: lastId + 1,
-          title: enteredTitle,
-          username: enteredUsername,
-          password: enteredPassword,
-          url: enteredUrl,
-          notes: enteredNotes));
-
-      Navigator.of(context).pop();
-    });
-
+    // int lastId = DUMMY_INFO[DUMMY_INFO.length - 1].id;
+    // print("Last ID: $lastId");
+    //
+    // setState(() {
+    //   DUMMY_INFO.add(PasswordInfo(
+    //       id: lastId + 1,
+    //       title: enteredTitle,
+    //       username: enteredUsername,
+    //       password: enteredPassword,
+    //       url: enteredUrl,
+    //       notes: enteredNotes));
+    //
+    //   Navigator.of(context).pop();
+    // });
   }
 
   @override
@@ -101,7 +111,7 @@ class _NewRecordState extends State<NewRecord> {
             ),
             ElevatedButton(
               child: Text(
-                'Add Transaction',
+                'Add Record',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -121,7 +131,7 @@ class _NewRecordState extends State<NewRecord> {
                   (states) => EdgeInsets.all(20),
                 ),
               ),
-              onPressed: () {},
+              onPressed: _submitData,
             ),
           ],
         ),
