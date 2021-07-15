@@ -1,12 +1,16 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:password_manager/model/password_info.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/login_screen.dart';
 import 'routes/transition_route_observer.dart';
 import 'package:window_size/window_size.dart';
 import 'dart:io';
+import 'package:path/path.dart';
 
-void main() {
+void main() async {
   SystemChrome.setSystemUIOverlayStyle(
     SystemUiOverlayStyle(
       systemNavigationBarColor:
@@ -15,6 +19,13 @@ void main() {
   );
 
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Hive functions
+  await Hive.initFlutter();
+  Hive.registerAdapter(PasswordInfoAdapter());
+  await Hive.openBox<PasswordInfo>('passwords');
+
+
   // Windows screen size and title
   if (Platform.isWindows) {
     setWindowTitle("PassLock");

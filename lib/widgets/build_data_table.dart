@@ -24,6 +24,7 @@ class BuildDataTable extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(20, 20, 20, 50),
       constraints: BoxConstraints(
         maxHeight: 500,
+        minWidth: 1000,
       ),
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_login/theme.dart';
 import 'package:flutter_login/widgets.dart';
+import 'package:hive/hive.dart';
+import 'package:password_manager/Connection/boxes.dart';
 import 'package:password_manager/model/password_info.dart';
 import 'package:password_manager/new_record.dart';
 import 'package:password_manager/widgets/build_data_table.dart';
@@ -13,6 +15,7 @@ import '../widgets/animated_numeric_text.dart';
 import '../widgets/round_button.dart';
 import 'package:random_password_generator/random_password_generator.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class DashboardScreen extends StatefulWidget {
   static const routeName = '/dashboard';
@@ -62,6 +65,9 @@ class _DashboardScreenState extends State<DashboardScreen>
   void dispose() {
     routeObserver.unsubscribe(this);
     _loadingController!.dispose();
+
+    Hive.box('passwords').close();
+
     super.dispose();
   }
 
@@ -228,47 +234,56 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
-  final List<PasswordInfo> _userRecords = [
-    PasswordInfo(
-      id: 1,
-      title: "Facebook",
-      username: "test@gmail.com",
-      password: r"Fb$12Esa",
-      url: "https://facebook.com",
-      notes: "Login to facebook",
-    ),
-    PasswordInfo(
-      id: 2,
-      title: "Gmail",
-      username: "test@gmail.com",
-      password: r"Gm$tYsw1",
-      url: "https://gmail.com",
-      notes: "Sign in to sub gmail account",
-    ),
-    PasswordInfo(
-      id: 3,
-      title: "GitHub",
-      username: "test@gmail.com",
-      password: r"vv%21SAQ^ld",
-      url: "https://github.com/login",
-      notes: "",
-    ),
-    PasswordInfo(
-      id: 4,
-      title: "GitLab",
-      username: "hsayfi@outlook.com",
-      password: r"TestMe",
-      url: "https://gitlab.com/users/sign_in",
-      notes: "Work git account",
-    ),
-  ];
+  // final List<PasswordInfo> _userRecords = [
+  //   PasswordInfo(
+  //     id: 1,
+  //     title: "Facebook",
+  //     username: "test@gmail.com",
+  //     password: r"Fb$12Esa",
+  //     url: "https://facebook.com",
+  //     notes: "Login to facebook",
+  //   ),
+  //   PasswordInfo(
+  //     id: 2,
+  //     title: "Gmail",
+  //     username: "test@gmail.com",
+  //     password: r"Gm$tYsw1",
+  //     url: "https://gmail.com",
+  //     notes: "Sign in to sub gmail account",
+  //   ),
+  //   PasswordInfo(
+  //     id: 3,
+  //     title: "GitHub",
+  //     username: "test@gmail.com",
+  //     password: r"vv%21SAQ^ld",
+  //     url: "https://github.com/login",
+  //     notes: "",
+  //   ),
+  //   PasswordInfo(
+  //     id: 4,
+  //     title: "GitLab",
+  //     username: "hsayfi@outlook.com",
+  //     password: r"TestMe",
+  //     url: "https://gitlab.com/users/sign_in",
+  //     notes: "Work git account",
+  //   ),
+  // ];
 
   void _addNewRecord(String recTitle, String recUsername, String recPassword,
       String recUrl, String recNotes) {
     // print("dummy info length: ${DUMMY_INFO.length}");
 
+    int id;
+
+    // Initiate box to save
+    final box = Boxes.getPasswordInfo();
+    if(box.isEmpty)
+      id = 1;
+    else
+      id = box.length;
+
     final newRec = PasswordInfo(
-      id: _userRecords.length + 1,
+      id: id,
       title: recTitle,
       username: recUsername,
       password: recPassword,
@@ -276,18 +291,22 @@ class _DashboardScreenState extends State<DashboardScreen>
       notes: recNotes,
     );
 
+
     print("Check newRec $newRec");
 
     setState(() {
-      _userRecords.add(newRec);
+      box.add(newRec);
+      // _userRecords.add(newRec);
 
-      print("Print _UserRecords: ${(_userRecords.map((e) => e.id)).toList()}");
+      // print("Print _UserRecords: ${(_userRecords.map((e) => e.id)).toList()}");
     });
 
     print(
       "title: $recTitle, username: $recUsername, password: $recPassword, url: $recUrl, notes: $recNotes",
     );
   }
+
+
 
   // void _startAddNewRecord(BuildContext ctx) {
   //   showModalBottomSheet(
@@ -329,7 +348,16 @@ class _DashboardScreenState extends State<DashboardScreen>
               children: [
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  child: BuildDataTable(_userRecords),
+                  // #Building Data Table
+                  // child: BuildDataTable(_userRecords),
+                  child: ValueListenableBuilder<Box<PasswordInfo>>(
+                    valueListenable: Boxes.getPasswordInfo().listenable(),
+                    builder: (context, box, _) {
+                      final passwords = box.values.toList().cast<PasswordInfo>();
+
+                      return BuildDataTable(passwords);
+                    },
+                  ),
                 ),
                 SizedBox(
                   height: 50,
@@ -372,8 +400,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   Center(
                                     child: TextButton(
                                       onPressed: () {
-                                        print(
-                                            "Print _UserRecords: ${(_userRecords.map((e) => e.id)).toList()}");
                                         Clipboard.setData(
                                           ClipboardData(text: newPassword),
                                         );
